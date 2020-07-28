@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { trigger } from "polyrhythm";
 
-export const MessageComposer = () => {
+export const MessageComposer = ({ myUserId = "me" }) => {
   const [pendingMessage, setPendingMessage] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    trigger("message/create", { text: pendingMessage });
+    trigger("message/create", { text: pendingMessage, userId: myUserId });
     setPendingMessage("");
   };
 
