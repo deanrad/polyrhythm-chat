@@ -2,14 +2,16 @@ import pathToAvatarA from "../images/avatar-a.png";
 import pathToAvatarB from "../images/avatar-b.png";
 
 import React, { useState } from "react";
+import { useListener } from "polyrhythm";
 
 export const ChatLog = () => {
   const [messages, setMessages] = useState([
-    { text: "Hi YOU!" },
-    { text: "I'm here to talk - whaddya wanna know?" },
-    { text: "What is the answer to the eternal question?", userId: "me" },
-    { text: "It is ..." },
   ]);
+
+  useListener(/message\/(from|create)/, (event) => {
+    const message = event.payload;
+    setMessages((all) => [...all, message]);
+  });
 
   return (
     <div className="chat-log">
