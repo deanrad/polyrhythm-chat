@@ -6,7 +6,10 @@ export const WebsocketService = ({ myID = "me", url = "" }) => {
     const socket = io(url);
 
     socket.on("event", ({ type, payload }) => {
-      if (type.startsWith("message/from/")) {
+      if (
+        type.startsWith("message/from/") ||
+        type.startsWith("message/edit/")
+      ) {
         trigger(type, payload); // <<------ Announce "you've got a chat"!
       }
     });
