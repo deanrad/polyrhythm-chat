@@ -1,7 +1,7 @@
 import io from "socket.io-client";
-import { useEffectAtMount, trigger, listen } from "polyrhythm";
+import { useEffectAtMount, trigger, listen, concat, after } from "polyrhythm";
 
-export const WebsocketService = ({ myID, url = "" }) => {
+export const WebsocketService = ({ myID = "me", url = "" }) => {
   useEffectAtMount(() => {
     const socket = io(url);
 
@@ -15,8 +15,20 @@ export const WebsocketService = ({ myID, url = "" }) => {
       socket.emit("event", { type: `message/from/${myID}`, payload });
     });
 
+    const typingForwarder = listen(
+      "message/edit/me",
+      () =>
+        //prettier-ignore
+        concat(
+          after(0, () => trigger(`message/edit/${myID}` /*//socket.emit("event", { type: `message/edit/${myID}` })*/ )),
+          after(1000)
+        ),
+      { mode: "ignore" }
+    );
+
     return () => {
       forwarder.unsubscribe();
+      typingForwarder.unsubscribe();
       socket.close();
     };
   });

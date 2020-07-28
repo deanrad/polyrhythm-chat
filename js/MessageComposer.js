@@ -14,6 +14,8 @@ export const MessageComposer = () => {
   const handleChange = ({ target }) => {
     // Update React
     setPendingMessage(target.value);
+    // Announce our edit
+    trigger("message/edit/me");
   };
 
   return (
