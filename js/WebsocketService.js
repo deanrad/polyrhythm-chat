@@ -1,5 +1,5 @@
 import io from "socket.io-client";
-import { useEffectAtMount, trigger } from "polyrhythm";
+import { useEffectAtMount, trigger, listen } from "polyrhythm";
 
 export const WebsocketService = ({ myID, url = "" }) => {
   useEffectAtMount(() => {
@@ -11,7 +11,12 @@ export const WebsocketService = ({ myID, url = "" }) => {
       }
     });
 
+    const forwarder = listen("message/create", ({ payload }) => {
+      socket.emit("event", { type: `message/from/${myID}`, payload });
+    });
+
     return () => {
+      forwarder.unsubscribe();
       socket.close();
     };
   });
