@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { trigger } from "polyrhythm";
 
 export const MessageComposer = () => {
   const [pendingMessage, setPendingMessage] = useState("");
@@ -6,6 +7,7 @@ export const MessageComposer = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    trigger("message/create", { text: pendingMessage });
     setPendingMessage("");
   };
 
