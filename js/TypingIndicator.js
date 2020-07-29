@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { concat, after, useListener } from "polyrhythm";
 
-export const TypingIndicator = ({ timeout = 5000 }) => {
-  const [isTyping, setTyping] = useState(false);
-
+export const TypingIndicator = ({ isTyping, timeout = 5000 }) => {
   return (
     isTyping && (
       <div className="chat-message__typing">
